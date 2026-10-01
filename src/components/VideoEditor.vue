@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import { open } from '@tauri-apps/plugin-dialog';
@@ -116,6 +116,10 @@ const fullOutputPath = computed(() => {
   if (!outputDir.value || !outputFilename.value) return '';
   const sep = outputDir.value.endsWith('\\') || outputDir.value.endsWith('/') ? '' : '\\';
   return outputDir.value + sep + outputFilename.value;
+});
+
+watch(fullOutputPath, () => {
+  updateCommand();
 });
 
 function updateCommand() {

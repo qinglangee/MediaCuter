@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "音视频剪辑工具",
-        "width": 1280,
-        "height": 900,
+        "width": 896,
+        "height": 630,
         "resizable": true
       }
     ],

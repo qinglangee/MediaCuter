@@ -119,6 +119,10 @@ const fullOutputPath = computed(() => {
   return outputDir.value + sep + outputFilename.value;
 });
 
+watch(fullOutputPath, () => {
+  updateCommand();
+});
+
 function updateCommand() {
   if (!filePath.value || !fullOutputPath.value) {
     commandStr.value = '';
