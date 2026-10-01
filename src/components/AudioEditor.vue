@@ -82,7 +82,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
-import { invoke } from '@tauri-apps/api/core';
+import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import { open } from '@tauri-apps/plugin-dialog';
 import { formatTime } from '../utils/time.js';
@@ -167,7 +167,8 @@ async function loadFile(path) {
     outputFilename.value = uParts[uParts.length - 1];
 
     if (audioRef.value) {
-      audioRef.value.src = `file:///${path.replace(/\\/g, '/')}`;
+      await invoke('allow_asset_path', { path });
+      audioRef.value.src = convertFileSrc(path);
     }
 
     const waveformData = await invoke('get_waveform_data', { filePath: path });

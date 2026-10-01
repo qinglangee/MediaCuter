@@ -86,7 +86,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { invoke } from '@tauri-apps/api/core';
+import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import { open } from '@tauri-apps/plugin-dialog';
 import { formatTime } from '../utils/time.js';
@@ -166,7 +166,8 @@ async function loadFile(path) {
     outputFilename.value = uParts[uParts.length - 1];
 
     if (videoRef.value) {
-      videoRef.value.src = `file:///${path.replace(/\\/g, '/')}`;
+      await invoke('allow_asset_path', { path });
+      videoRef.value.src = convertFileSrc(path);
     }
     updateCommand();
   } catch (e) {

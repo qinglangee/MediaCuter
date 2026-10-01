@@ -193,6 +193,16 @@ fn get_unique_output_path(dir: &str, filename: &str) -> Result<String, String> {
 }
 
 #[tauri::command]
+fn allow_asset_path(app: tauri::AppHandle, path: String) -> Result<(), String> {
+    let p = std::path::Path::new(&path);
+    app.asset_protocol_scope().allow_file(p).map_err(|e| e.to_string())?;
+    if let Some(parent) = p.parent() {
+        let _ = app.asset_protocol_scope().allow_directory(parent, true);
+    }
+    Ok(())
+}
+
+#[tauri::command]
 async fn execute_ffmpeg(
     app: tauri::AppHandle,
     command_str: Vec<String>,
@@ -271,6 +281,7 @@ pub fn run() {
             get_waveform_data,
             execute_ffmpeg,
             get_unique_output_path,
+            allow_asset_path,
         ])
         .setup(|app| {
             let main_window = app.get_webview_window("main").unwrap();
@@ -279,6 +290,10 @@ pub fn run() {
                 if let WindowEvent::DragDrop(drag_event) = event {
                     if let DragDropEvent::Drop { paths, .. } = drag_event {
                         if let Some(path) = paths.first() {
+                            let _ = app_handle.asset_protocol_scope().allow_file(path);
+                            if let Some(parent) = path.parent() {
+                                let _ = app_handle.asset_protocol_scope().allow_directory(parent, true);
+                            }
                             let _ = app_handle.emit("file-dropped", path.to_string_lossy().to_string());
                         }
                     }
