@@ -371,12 +371,14 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 400px;
+  flex: 1;
+  min-height: 120px;
 }
 
 .video-container video {
   max-width: 100%;
-  max-height: 400px;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .section {
