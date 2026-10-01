@@ -3,10 +3,12 @@
     <div class="tabs">
       <button :class="{ active: activeTab === 'video' }" @click="activeTab = 'video'">视频剪辑</button>
       <button :class="{ active: activeTab === 'audio' }" @click="activeTab = 'audio'">音频剪辑</button>
+      <button :class="{ active: activeTab === 'convert' }" @click="activeTab = 'convert'">格式转换</button>
     </div>
     <div class="content">
       <VideoEditor v-if="activeTab === 'video'" />
       <AudioEditor v-if="activeTab === 'audio'" />
+      <FormatConverter v-if="activeTab === 'convert'" />
     </div>
   </div>
 </template>
@@ -15,6 +17,7 @@
 import { ref } from 'vue';
 import VideoEditor from './components/VideoEditor.vue';
 import AudioEditor from './components/AudioEditor.vue';
+import FormatConverter from './components/FormatConverter.vue';
 
 const activeTab = ref('video');
 </script>
